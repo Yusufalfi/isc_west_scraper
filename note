@@ -1,0 +1,54 @@
+https://www.discoverisc.com/west/en-us/2025-exhibitors/exhibitor-directory.html?locale=en-US&query=
+
+1. Nama & Deskripsi Proyek
+Nama Proyek: ISC West Exhibitor Data Scraper 2026
+
+Deskripsi: Program otomatisasi berbasis Python untuk mengekstrak seluruh data eksibitor (exhibitors) dari katalog pameran ISC West secara terstruktur ke dalam file Excel (.xlsx) dan CSV.
+
+2. Target Website & Tujuan Proyek
+Target Website: Discover ISC (Reed Expo) – https://www.discoverisc.com/
+
+Tujuan Proyek: Mengumpulkan daftar lengkap 813 perusahaan/eksibitor yang berpartisipasi dalam pameran ISC West untuk kebutuhan prospeksi bisnis (lead generation) dan analisis peserta pameran.
+
+3. Data yang Di-scrape (Kolom Output Excel/CSV)
+Sesuai dengan kriteria dan urutan permintaan klien:
+
+Company Name – Nama perusahaan eksibitor
+
+Website – URL situs web resmi perusahaan
+
+Email – Alasan / kontak email resmi perusahaan (contactEmail)
+
+Stand # – Nomor stan / booth di pameran
+
+LinkedIn Company URL – Link profil LinkedIn perusahaan (filtered)
+
+Why Visit Our Stand – Deksripsi alasan/tujuan mengunjungi stan (showObjective)
+
+Description – Profil/deskripsi lengkap perusahaan
+
+Brands We Will Feature – Merek/produk unggulan yang ditampilkan
+
+Product Categories – Kategori produk (dipisahkan tanda koma)
+
+Source URL – Halaman detail resmi eksibitor di situs ISC West
+4. Metodologi & Cara Kerja (How It Works)
+Proyek ini menggunakan kombinasi API Reverse Engineering (Hybrid Scraper) tanpa menggunakan browser headless (seperti Selenium/Playwright) agar eksekusi cepat dan efisien:
+
+Tahap 1: Algolia Index Search (algolia_fetcher.py)
+
+Mengirim request HTTP POST ke endpoint Algolia (xd0u5m6y4r-dsn.algolia.net) untuk mengambil seluruh daftar 813 ID Organisasi (organisationId dengan format org-...).
+
+Tahap 2: GraphQL API Direct Extraction (graphql_fetcher.py)
+
+Memanfaatkan endpoint GraphQL resmi Reed Expo ([api.reedexpo.com/graphql/](https://api.reedexpo.com/graphql/)).
+
+Menembus proteksi 401 Unauthorized dengan menyertakan header otorisasi web: x-clientid, x-correlationid, dan rx-event-edition-id.
+
+Mengirim kueri exhibitingOrganisation menggunakan parameter eventEditionId dan organisationId.
+
+Tahap 3: Parsing & Export Data (exporter.py & main.py)
+
+Membongkar JSON bersarang dari GraphQL, menyaring link LinkedIn, dan menggabungkan list kategori/brand.
+
+Mengonversi data ke dalam DataFrame Pandas dan menyimpannya secara otomatis ke format .xlsx dan .csv.
